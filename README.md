@@ -14,7 +14,7 @@
       <li>It also calculates Total payment and Total interest to be paid. </li>
     </ol>
     <h2><p>&#128247; Screenshots</h2></p>
-    <img src="https://github.com/ronitn/emi/blob/main/EMI-Loan-Calculator.png" alt="EMI-Loan-Calculator" height=400 width=300>
+    <img src="https://github.com/ronitn/emi/blob/main/calc.png" alt="EMI-Loan-Calculator" height=400 width=300>
     </p>
   </body>
 </html>
