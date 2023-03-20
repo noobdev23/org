@@ -8,7 +8,6 @@ function calculateLoanAmount()
     UImonthlyPayment=document.getElementById("monthly-payment");
     UItotalPayment=document.getElementById("total-payment");
     UItotalInterest=document.getElementById("total-interest");
-    UIcurrency=document.getElementById("currency");
 
     principal=parseFloat(UIamount.value);
     calculatedInterest=parseFloat(UIinterest.value)/100/12;
@@ -27,33 +26,8 @@ function calculateLoanAmount()
         UImonthlyPayment.value=monthly.toFixed(2);
         UItotalPayment.value=(monthly*calculatedPayment).toFixed(2);
         UItotalInterest.value=((monthly*calculatedPayment)-principal).toFixed(2);
-
-        // get selected currency option
-        currencyOption = UIcurrency.options[UIcurrency.selectedIndex].value;
-
-        // format currency based on selected option
-        switch(currencyOption) {
-          case 'USD':
-            UImonthlyPayment.value = '$' + UImonthlyPayment.value;
-            UItotalPayment.value = '$' + UItotalPayment.value;
-            UItotalInterest.value = '$' + UItotalInterest.value;
-            break;
-          case 'EUR':
-            UImonthlyPayment.value = '€' + UImonthlyPayment.value;
-            UItotalPayment.value = '€' + UItotalPayment.value;
-            UItotalInterest.value = '€' + UItotalInterest.value;
-            break;
-          case 'INR':
-            UImonthlyPayment.value = '₹' + UImonthlyPayment.value;
-            UItotalPayment.value = '₹' + UItotalPayment.value;
-            UItotalInterest.value = '₹' + UItotalInterest.value;
-            break;
-          default:
-            break;
-        }
-
         document.getElementById('results').style.display='block';
-      }
-      else
-          alert("Please Check Entered Amount");
+    }
+    else
+        alert("Please Check Entered Amount");
 }
