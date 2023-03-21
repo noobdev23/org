@@ -56,4 +56,42 @@ function calculateLoanAmount() {
     document.getElementById("total-interest").value = `${currency} ${(monthlyPayment * totalPayments - principal).toFixed(2)}`;
     document.getElementById("results").style.display = "block";
     document.getElementById("amortization").style.display = "block";
+ }
+
+// Create an array to hold the data for the chart
+var chartData = [];
+
+// Loop through each row in the amortization table and add it to the chart data array
+var tableRows = document.getElementById("amortization-body").getElementsByTagName("tr");
+for (var i = 0; i < tableRows.length; i++) {
+    var row = tableRows[i].getElementsByTagName("td");
+    chartData.push({
+        x: row[1].textContent,
+        y: parseFloat(row[6].textContent)
+    });
 }
+
+// Get the canvas element and create a new Chart object with the data
+var canvas = document.getElementById("amortization-chart");
+var chart = new Chart(canvas, {
+    type: 'line',
+    data: {
+        datasets: [{
+            label: 'Ending Balance',
+            data: chartData,
+            backgroundColor: 'rgba(255, 99, 132, 0.2)',
+            borderColor: 'rgba(255, 99, 132, 1)',
+            borderWidth: 1
+        }]
+    },
+    options: {
+        scales: {
+            xAxes: [{
+                type: 'time',
+                time: {
+                    unit: 'month'
+                }
+            }]
+        }
+    }
+});
