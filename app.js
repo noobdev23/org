@@ -1,98 +1,59 @@
 setTimeout(calculateLoanAmount,2000);
-function calculateLoanAmount()
-{
 
-    UIamount=document.getElementById("amount");
-    UIinterest=document.getElementById("interest");
-    UIyears=document.getElementById("years");
-    UImonthlyPayment=document.getElementById("monthly-payment");
-    UItotalPayment=document.getElementById("total-payment");
-    UItotalInterest=document.getElementById("total-interest");
+function calculateLoanAmount() {
 
-    principal=parseFloat(UIamount.value);
-    calculatedInterest=parseFloat(UIinterest.value)/100/12;
-    calculatedPayment=parseFloat(UIyears.value)*12;
+    // Get user input
+    const principal = parseFloat(document.getElementById("amount").value);
+    const interestRate = parseFloat(document.getElementById("interest").value) / 100;
+    const years = parseFloat(document.getElementById("years").value);
+    const currency = document.getElementById("currency").value;
 
-    x=Math.pow(1+calculatedInterest,calculatedPayment);
-    monthly=(principal*x*calculatedInterest)/(x-1);
+    // Calculate monthly payment
+    const monthlyInterestRate = interestRate / 12;
+    const totalPayments = years * 12;
+    const x = Math.pow(1 + monthlyInterestRate, totalPayments);
+    const monthlyPayment = (principal * x * monthlyInterestRate) / (x - 1);
 
-    if(principal<0)
-        alert('Please Enter Positive Amount for Principal...!!');
-    else if(calculatedInterest<0)
-        alert('Please Enter Positive Interest Rate');
-    else if(calculatedPayment<0)
-        alert('Please Enter Positive Amount');
-    else if(isFinite(monthly)){
-        UImonthlyPayment.value=monthly.toFixed(2);
-        UItotalPayment.value=(monthly*calculatedPayment).toFixed(2);
-        UItotalInterest.value=((monthly*calculatedPayment)-principal).toFixed(2);
-        document.getElementById('results').style.display='block';
-    }
-    else
-        alert("Please Check Entered Amount");
-}
-
-function calculateAmortization(){
-    var loanAmount=parseFloat(document.getElementById("amount").value);
-    var interestRate=parseFloat(document.getElementById("interest").value);
-    var years=parseFloat(document.getElementById("years").value);
-
-    var monthlyInterestRate=interestRate/(100*12);
-    var numberOfPayments=years*12;
-
-    var monthlyPayment=calculateLoanAmount();
-
-    var tableBody=document.getElementById("amortization-body");
-
-    var balance=loanAmount;
-    var today=new Date();
-    var totalInterest=0;
-
-    tableBody.innerHTML="";
-
-    for(var i=0; i<numberOfPayments; i++){
-        var interest=balance*monthlyInterestRate;
-        var principal=monthlyPayment-interest;
-        balance-=principal;
-        totalInterest+=interest;
-
-        var date=new Date(today.getTime());
-        date.setMonth(today.getMonth()+i+1);
-
-        var tableRow=document.createElement("tr");
-
-        var paymentNumberColumn=document.createElement("td");
-        paymentNumberColumn.innerHTML=i+1;
-
-        var dateColumn=document.createElement("td");
-        dateColumn.innerHTML=(date.getMonth()+1)+"/"+date.getDate()+"/"+date.getFullYear();
-
-        var startingBalanceColumn=document.createElement("td");
-        startingBalanceColumn.innerHTML=balance+principal;
-
-        var paymentColumn=document.createElement("td");
-        paymentColumn.innerHTML=monthlyPayment.toFixed(2);
-
-        var principalColumn=document.createElement("td");
-        principalColumn.innerHTML=principal.toFixed(2);
-
-        var interestColumn=document.createElement("td");
-        interestColumn.innerHTML=interest.toFixed(2);
-
-        var endingBalanceColumn=document.createElement("td");
-        endingBalanceColumn.innerHTML=balance.toFixed(2);
-
-        tableRow.appendChild(paymentNumberColumn);
-        tableRow.appendChild(dateColumn);
-        tableRow.appendChild(startingBalanceColumn);
-        tableRow.appendChild(paymentColumn);
-        tableRow.appendChild(principalColumn);
-        tableRow.appendChild(interestColumn);
-        tableRow.appendChild(endingBalanceColumn);
-
-        tableBody.appendChild(tableRow);
+    // Check for valid input
+    if (isNaN(principal) || isNaN(interestRate) || isNaN(years) || principal < 0 || interestRate < 0 || years < 0) {
+        alert("Please enter valid input values");
+        return;
     }
 
-    document.getElementById("total-interest").value=totalInterest.toFixed(2);
-    document.getElementById("amortization").style.display="block";
+    // Calculate amortization table
+    const table = document.getElementById("amortization-body");
+    table.innerHTML = "";
+    let balance = principal;
+    for (let i = 1; i <= totalPayments; i++) {
+        const paymentDate = new Date();
+        paymentDate.setMonth(paymentDate.getMonth() + i);
+        const startingBalance = balance;
+        const interest = balance * monthlyInterestRate;
+        const principalPaid = monthlyPayment - interest;
+        balance -= principalPaid;
+
+        const row = table.insertRow();
+        const paymentNo = row.insertCell(0);
+        const date = row.insertCell(1);
+        const starting = row.insertCell(2);
+        const payment = row.insertCell(3);
+        const principal = row.insertCell(4);
+        const interestCell = row.insertCell(5);
+        const ending = row.insertCell(6);
+
+        paymentNo.innerHTML = i;
+        date.innerHTML = paymentDate.toLocaleDateString();
+        starting.innerHTML = `${currency} ${startingBalance.toFixed(2)}`;
+        payment.innerHTML = `${currency} ${monthlyPayment.toFixed(2)}`;
+        principal.innerHTML = `${currency} ${principalPaid.toFixed(2)}`;
+        interestCell.innerHTML = `${currency} ${interest.toFixed(2)}`;
+        ending.innerHTML = `${currency} ${balance.toFixed(2)}`;
+    }
+
+    // Display results
+    document.getElementById("monthly-payment").value = `${currency} ${monthlyPayment.toFixed(2)}`;
+    document.getElementById("total-payment").value = `${currency} ${(monthlyPayment * totalPayments).toFixed(2)}`;
+    document.getElementById("total-interest").value = `${currency} ${(monthlyPayment * totalPayments - principal).toFixed(2)}`;
+    document.getElementById("results").style.display = "block";
+    document.getElementById("amortization").style.display = "block";
 }
