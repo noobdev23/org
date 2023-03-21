@@ -32,3 +32,22 @@ body {
   background-color: #454545; /* dark gray */
   color: #dcdcdc; /* light gray */
 }
+
+<div class="table-responsive">
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>Payment No.</th>
+                <th>Date</th>
+                <th>Starting Balance</th>
+                <th>Payment</th>
+                <th>Principal</th>
+                <th>Interest</th>
+                <th>Ending Balance</th>
+            </tr>
+        </thead>
+        <tbody id="amortization-body">
+        </tbody>
+    </table>
+</div>
+}
